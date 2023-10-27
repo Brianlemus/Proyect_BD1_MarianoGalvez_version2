@@ -1,26 +1,26 @@
 --  crear base de datos para proyecto
-create database proyectBD1;
+create database ProyectoFinalBD;
 
--- Tabla de catalago
-CREATE TABLE catalago (
+-- Tabla de categorias
+CREATE TABLE categorias (
     idcategoria INT AUTO_INCREMENT PRIMARY KEY,
     nombre_categoria VARCHAR(100) NOT NULL,
     estado_categoria VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE editoriales (
+CREATE TABLE registro_editoriales (
     id_editorial INT AUTO_INCREMENT PRIMARY KEY,
     nombre_editorial VARCHAR(100) NOT NULL,
     estado_editorial VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE autores (
+CREATE TABLE registro_autores (
     id_autor INT AUTO_INCREMENT PRIMARY KEY,
     nombre_autor VARCHAR(100) NOT NULL,
     estado_autor VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE ejemplares (
+CREATE TABLE registro_ejemplares (
     idejemplar INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     id_autor INT NOT NULL,
@@ -29,29 +29,29 @@ CREATE TABLE ejemplares (
     idcategoria INT,
     fecha_registro DATE,
     estado VARCHAR(100),
-    FOREIGN KEY (id_autor) REFERENCES autores(id_autor) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_editorial) REFERENCES editoriales(id_editorial) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (idcategoria) REFERENCES catalago(idcategoria) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (id_autor) REFERENCES registro_autores(id_autor) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_editorial) REFERENCES registro_editoriales(id_editorial) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idcategoria) REFERENCES categorias(idcategoria) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE inventario (
-    id_inventario INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_inventario VARCHAR(100) NOT NULL
+CREATE TABLE inventarios (
+    id_inventarios INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_inventarios VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE inventario_detalle (
+CREATE TABLE detalle_inventario (
     id_registro INT AUTO_INCREMENT PRIMARY KEY,
-    id_inventario INT NOT NULL,
+    id_inventarios INT NOT NULL,
     idejemplar INT NOT NULL,
     stock INT NOT NULL,
     stock_reserva INT NOT NULL,
-    FOREIGN KEY (id_inventario) REFERENCES inventario(id_inventario) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (idejemplar) REFERENCES ejemplares(idejemplar) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (id_inventarios) REFERENCES inventarios(id_inventarios) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idejemplar) REFERENCES registro_ejemplares(idejemplar) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE campus (
-    idcampus INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_campus VARCHAR(100) NOT NULL,
+CREATE TABLE campus_universidades (
+    idcampus_universidades INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_campus_universidades VARCHAR(100) NOT NULL,
     estado VARCHAR(100) NOT NULL,
     ubicacion VARCHAR(100) NOT NULL,
     fecha_creacion DATE NOT NULL
@@ -64,37 +64,37 @@ CREATE TABLE encargados (
     estado_encargado VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE horarios (
+CREATE TABLE registro_horarios (
     id_horario INT AUTO_INCREMENT PRIMARY KEY,
     hora_apertura TIME NOT NULL,
     hora_cierre TIME NOT NULL,
     estado_horario VARCHAR(45) NOT NULL
 );
 
-CREATE TABLE bibliotecas (
+CREATE TABLE registro_bibliotecas (
     idbiblioteca INT AUTO_INCREMENT PRIMARY KEY,
     nombre_biblioteca VARCHAR(100) NOT NULL,
     estado_biblioteca VARCHAR(100) NOT NULL,
     fecha_creacion DATE NOT NULL,
-    id_inventario INT NOT NULL,
-    idcampus INT NOT NULL,
+    id_inventarios INT NOT NULL,
+    idcampus_universidades INT NOT NULL,
     ubicacion_biblioteca VARCHAR(100) NOT NULL,
     id_encargado INT NOT NULL,
     id_horario INT NOT NULL,
-    UNIQUE KEY (id_inventario),
-    FOREIGN KEY (id_inventario) REFERENCES inventario(id_inventario) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (idcampus) REFERENCES campus(idcampus) ON DELETE CASCADE ON UPDATE CASCADE,
+    UNIQUE KEY (id_inventarios),
+    FOREIGN KEY (id_inventarios) REFERENCES inventarios(id_inventarios) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idcampus_universidades) REFERENCES campus_universidades(idcampus_universidades) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_encargado) REFERENCES encargados(id_encargado) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_horario) REFERENCES horarios(id_horario) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (id_horario) REFERENCES registro_horarios(id_horario) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE carrera_universitaria (
+CREATE TABLE carreras_disponibles (
     id_carrera INT AUTO_INCREMENT PRIMARY KEY,
     nombre_carrera VARCHAR(100) NOT NULL,
     estado_carrera VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE estudiantes (
+CREATE TABLE registro_estudiantes (
     id_estudiante INT AUTO_INCREMENT PRIMARY KEY,
     nombre_estudiante VARCHAR(100) NOT NULL,
     carnet VARCHAR(100) NOT NULL,
@@ -102,25 +102,25 @@ CREATE TABLE estudiantes (
     fecha_ingreso DATE NOT NULL,
     estado_estudiante VARCHAR(45) NOT NULL,
     id_carrera INT NOT NULL,
-    idcampus INT NOT NULL,
-    FOREIGN KEY (idcampus) REFERENCES campus(idcampus) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_carrera) REFERENCES carrera_universitaria(id_carrera) ON DELETE CASCADE ON UPDATE CASCADE
+    idcampus_universidades INT NOT NULL,
+    FOREIGN KEY (idcampus_universidades) REFERENCES campus_universidades(idcampus_universidades) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_carrera) REFERENCES carreras_disponibles(id_carrera) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE estado_movimientos (
+CREATE TABLE estado_mov (
     idestado_movimiento INT AUTO_INCREMENT PRIMARY KEY,
     descripcion_estado VARCHAR(45)
 );
 
-CREATE TABLE movimientos_prestamo (
+CREATE TABLE movimientos (
     id_movimiento INT AUTO_INCREMENT PRIMARY KEY,
     idbiblioteca INT NOT NULL,
     id_estudiante INT NOT NULL,
     fecha_movimiento DATE NOT NULL,
     idestado_movimiento INT NOT NULL,
-    FOREIGN KEY (idestado_movimiento) REFERENCES estado_movimientos(idestado_movimiento) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (idbiblioteca) REFERENCES bibliotecas(idbiblioteca) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_estudiante) REFERENCES estudiantes(id_estudiante) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (idestado_movimiento) REFERENCES estado_mov(idestado_movimiento) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idbiblioteca) REFERENCES registro_bibliotecas(idbiblioteca) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_estudiante) REFERENCES registro_estudiantes(id_estudiante) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE tipo_movimiento(
@@ -129,8 +129,8 @@ CREATE TABLE tipo_movimiento(
     estado_movimiento VARCHAR(45) NOT NULL
 );
 
-CREATE TABLE detalle_movimiento (
-    iddetalle_movimiento INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE movimiento_detalle (
+    idmovimiento_detalle INT AUTO_INCREMENT PRIMARY KEY,
     fecha_ingreso DATE NOT NULL,
     fecha_vencimiento DATE NOT NULL,
     id_movimiento INT NOT NULL,
@@ -138,8 +138,8 @@ CREATE TABLE detalle_movimiento (
     idtipo_movimiento INT NOT NULL,
     idestado_movimiento INT NOT NULL,
     cantidad INT NOT NULL,
-    FOREIGN KEY (id_movimiento) REFERENCES movimientos_prestamo(id_movimiento) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (idejemplar) REFERENCES ejemplares(idejemplar) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_movimiento) REFERENCES movimientos(id_movimiento) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idejemplar) REFERENCES registro_ejemplares(idejemplar) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (idtipo_movimiento) REFERENCES tipo_movimiento(idtipo_movimiento) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (idestado_movimiento) REFERENCES estado_movimientos(idestado_movimiento) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (idestado_movimiento) REFERENCES estado_mov(idestado_movimiento) ON DELETE CASCADE ON UPDATE CASCADE
 );

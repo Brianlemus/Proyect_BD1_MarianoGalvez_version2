@@ -1,22 +1,22 @@
 -- ----------------------------1. Préstamos Vencidos de un Estudiante:
 DELIMITER $$
-CREATE PROCEDURE ListadoEstudiantesPrestamosVencidos(IN estudiante INT)
+CREATE PROCEDURE prestamos_vencidos(IN estudiante INT)
 BEGIN
 	SELECT mp.id_movimiento
-                , (SELECT nombre_biblioteca FROM bibliotecas AS bl WHERE bl.idbiblioteca=mp.idbiblioteca) AS nombre_biblioteca
+                , (SELECT nombre_biblioteca FROM registro_bibliotecas AS bl WHERE bl.idbiblioteca=mp.idbiblioteca) AS nombre_biblioteca
                 , es.nombre_estudiante
                 , dm.fecha_ingreso
                 , dm.fecha_vencimiento 
-                , (SELECT nombre FROM ejemplares j WHERE j.idejemplar=dm.idejemplar) AS ejemplar
+                , (SELECT nombre FROM registro_ejemplares j WHERE j.idejemplar=dm.idejemplar) AS ejemplar
                 , tp.descripcion AS nombre_movimiento
-                ,(SELECT descripcion_estado FROM estado_movimientos ee WHERE ee.idestado_movimiento = dm.idestado_movimiento) AS estado_movimiento
+                ,(SELECT descripcion_estado FROM estado_mov ee WHERE ee.idestado_movimiento = dm.idestado_movimiento) AS estado_movimiento
                 , dm.cantidad
-    FROM movimientos_prestamo mp
-    INNER JOIN detalle_movimiento AS dm
+    FROM movimientos mp
+    INNER JOIN movimiento_detalle AS dm
         ON mp.id_movimiento = dm.id_movimiento
     INNER JOIN tipo_movimiento tp 
         ON tp.idtipo_movimiento = dm.idtipo_movimiento
-    INNER JOIN estudiantes es 
+    INNER JOIN registro_estudiantes es 
         ON es.id_estudiante=mp.id_estudiante
     WHERE cast(dm.fecha_vencimiento AS DATE) < cast(NOW() AS DATE) 
         AND dm.idestado_movimiento=2 -- significa prestamo
@@ -25,16 +25,16 @@ END $$
 DELIMITER ;
 
 -- para invocar el procedimiento
-CALL ListadoEstudiantesPrestamosVencidos(1);
+CALL prestamos_vencidos(1);
 
 -- eliminar el procedimiento
-DROP PROCEDURE ListadoEstudiantesPrestamosVencidos;
+DROP PROCEDURE prestamos_vencidos;
 
 
 -- ----------------- 2. Reservar Ejemplar
 -- verifico que si haya disponibilidad en la bilbiote y ejemplar solicitado..!
 DELIMITER $$
-CREATE PROCEDURE reservaEjemplar(IN p_estudiante INT, IN p_biblioteca INT, IN p_ejemplar INT, IN p_fecha_vencimiento DATE, IN p_cantidad INT)
+CREATE PROCEDURE ejemplar_reservado(IN p_estudiante INT, IN p_biblioteca INT, IN p_ejemplar INT, IN p_fecha_vencimiento DATE, IN p_cantidad INT)
 	BEGIN
 	
 		DECLARE id_movimiento_creado INT;
@@ -44,14 +44,14 @@ CREATE PROCEDURE reservaEjemplar(IN p_estudiante INT, IN p_biblioteca INT, IN p_
 	
 		-- Verifica que haya disponibilidad en la biblioteca y ejemplar solicitado.
 		 SELECT SUM(stock) AS stock
-		FROM inventario_detalle id
-		INNER JOIN bibliotecas bl
-		    ON id.id_inventario = bl.id_inventario
+		FROM detalle_inventario id
+		INNER JOIN registro_bibliotecas bl
+		    ON id.id_inventarios = bl.id_inventarios
 		WHERE bl.idbiblioteca = p_biblioteca AND id.idejemplar = p_ejemplar
 		INTO total_stock;
 			
 		-- veritifico que el estudiante esta activo
-		SELECT COUNT(id_estudiante) INTO estudiante_activo_count FROM estudiantes es 
+		SELECT COUNT(id_estudiante) INTO estudiante_activo_count FROM registro_estudiantes es 
 		WHERE es.id_estudiante=p_estudiante 
 			AND es.estado_estudiante='Activo';
 			
@@ -61,14 +61,14 @@ CREATE PROCEDURE reservaEjemplar(IN p_estudiante INT, IN p_biblioteca INT, IN p_
 	        IF total_stock >= p_cantidad THEN
 	        
 	            -- Inserta encabezado (estado 2 es "Solicitado").
-	            INSERT INTO movimientos_prestamo (idbiblioteca, id_estudiante, fecha_movimiento, idestado_movimiento) VALUES
+	            INSERT INTO movimientos (idbiblioteca, id_estudiante, fecha_movimiento, idestado_movimiento) VALUES
 	                (p_biblioteca, p_estudiante, NOW(), 2);
 	
 	            -- Obtiene el valor del Primary Key generado automáticamente.
 	            SET id_movimiento_creado = LAST_INSERT_ID();
 	
 	            -- Inserta detalle.
-	            INSERT INTO detalle_movimiento (fecha_ingreso, fecha_vencimiento, id_movimiento, idejemplar, idtipo_movimiento, idestado_movimiento, cantidad) VALUES
+	            INSERT INTO movimiento_detalle (fecha_ingreso, fecha_vencimiento, id_movimiento, idejemplar, idtipo_movimiento, idestado_movimiento, cantidad) VALUES
     				(NOW(), STR_TO_DATE(p_fecha_vencimiento, '%Y-%m-%d'), id_movimiento_creado, p_ejemplar, 2, 2, p_cantidad);
 				
 					-- Envía un mensaje de éxito
@@ -90,7 +90,7 @@ DELIMITER ;
 
 -- para invocar el procedimiento
 -- Id_estudiante, idbliblioteca, idejemplar, fechavencimiento, cantidad
-CALL reservaEjemplar(2, 1, 1, '20231027', 2);
+CALL ejemplar_reservado(2, 1, 1, '20231027', 2);
 
 -- eliminar el procedimiento
-DROP PROCEDURE reservaEjemplar;
+DROP PROCEDURE ejemplar_reservado;

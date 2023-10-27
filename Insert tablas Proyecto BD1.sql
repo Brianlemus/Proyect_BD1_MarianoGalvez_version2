@@ -1,9 +1,9 @@
-INSERT INTO catalago (nombre_categoria, estado_categoria) VALUES
+INSERT INTO categorias (nombre_categoria, estado_categoria) VALUES
     ('Libro', 'Activo'),
     ('Revista', 'Activo'),
     ('Materiales Digitales', 'Activo');
 
-INSERT INTO editoriales (nombre_editorial, estado_editorial) VALUES
+INSERT INTO registro_editoriales (nombre_editorial, estado_editorial) VALUES
     ('Editorial A', 'Activo'),
     ('Editorial B', 'Activo'),
     ('Editorial C', 'Activo'),
@@ -20,7 +20,7 @@ INSERT INTO editoriales (nombre_editorial, estado_editorial) VALUES
     ('Editorial N', 'Inactivo'),
     ('Editorial O', 'Inactivo');
 
-INSERT INTO autores (nombre_autor, estado_autor) VALUES
+INSERT INTO registro_autores (nombre_autor, estado_autor) VALUES
     ('Autor 1', 'Activo'),
     ('Autor 2', 'Activo'),
     ('Autor 3', 'Activo'),
@@ -37,7 +37,7 @@ INSERT INTO autores (nombre_autor, estado_autor) VALUES
     ('Autor 14', 'Inactivo'),
     ('Autor 15', 'Inactivo');
 
-INSERT INTO ejemplares (nombre, id_autor, fecha_lanzamiento, id_editorial, idcategoria, fecha_registro, estado) VALUES
+INSERT INTO registro_ejemplares (nombre, id_autor, fecha_lanzamiento, id_editorial, idcategoria, fecha_registro, estado) VALUES
     ('Base de datos 1', 1, '2023-01-15', 1, 1, '2023-01-10', 'Actvo'),
     ('Base de datos 2', 2, '2022-12-20', 2, 2, '2023-01-05', 'Actvo'),
     ('Base de datos 3', 3, '2021-11-05', 3, 3, '2022-12-28', 'Actvo'),
@@ -54,17 +54,17 @@ INSERT INTO ejemplares (nombre, id_autor, fecha_lanzamiento, id_editorial, idcat
     ('Reduc + ReactJS + TypeScript', 14, '2023-06-30', 14, 2, '2023-06-25', 'Actvo'),
     ('Lenguajes mas usados', 15, '2022-05-12', 15, 2, '2022-05-10', 'Actvo');
 
-INSERT INTO campus (nombre_campus, estado, ubicacion, fecha_creacion) VALUES
-    ('Campus A', 'Activo', 'Ubicación A', '2023-10-24'),
-    ('Campus B', 'Activo', 'Ubicación B', '2023-10-24'),
-    ('Campus C', 'Inactivo', 'Ubicación C', '2023-10-24'),
-    ('Campus D', 'Activo', 'Ubicación D', '2023-10-24'),
-    ('Campus E', 'Activo', 'Ubicación E', '2023-10-24'),
-    ('Campus F', 'Inactivo', 'Ubicación F', '2023-10-24'),
-    ('Campus G', 'Activo', 'Ubicación G', '2023-10-24'),
-    ('Campus H', 'Activo', 'Ubicación H', '2023-10-24'),
-    ('Campus I', 'Inactivo', 'Ubicación I', '2023-10-24'),
-    ('Campus J', 'Activo', 'Ubicación J', '2023-10-24');
+INSERT INTO campus_universidades (nombre_campus_universidades, estado, ubicacion, fecha_creacion) VALUES
+    ('campus_universidades A', 'Activo', 'Ubicación A', '2023-10-24'),
+    ('campus_universidades B', 'Activo', 'Ubicación B', '2023-10-24'),
+    ('campus_universidades C', 'Inactivo', 'Ubicación C', '2023-10-24'),
+    ('campus_universidades D', 'Activo', 'Ubicación D', '2023-10-24'),
+    ('campus_universidades E', 'Activo', 'Ubicación E', '2023-10-24'),
+    ('campus_universidades F', 'Inactivo', 'Ubicación F', '2023-10-24'),
+    ('campus_universidades G', 'Activo', 'Ubicación G', '2023-10-24'),
+    ('campus_universidades H', 'Activo', 'Ubicación H', '2023-10-24'),
+    ('campus_universidades I', 'Inactivo', 'Ubicación I', '2023-10-24'),
+    ('campus_universidades J', 'Activo', 'Ubicación J', '2023-10-24');
 
 INSERT INTO encargados (nombre_encargado, apellido_encargado, estado_encargado) VALUES
     ('Juan', 'Pérez', 'Activo'),
@@ -78,7 +78,7 @@ INSERT INTO encargados (nombre_encargado, apellido_encargado, estado_encargado) 
     ('Javier', 'Díaz', 'Inactivo'),
     ('Carmen', 'Ramírez', 'Activo');
 
-INSERT INTO horarios (hora_apertura, hora_cierre, estado_horario) VALUES
+INSERT INTO registro_horarios (hora_apertura, hora_cierre, estado_horario) VALUES
     ('08:00:00', '17:00:00', 'Activo'),
     ('09:30:00', '18:30:00', 'Activo'),
     ('07:45:00', '16:45:00', 'Inactivo'),
@@ -90,19 +90,19 @@ INSERT INTO horarios (hora_apertura, hora_cierre, estado_horario) VALUES
     ('07:00:00', '16:00:00', 'Inactivo'),
     ('08:45:00', '17:45:00', 'Activo');
 
-INSERT INTO inventario (nombre_inventario) VALUES
-    ('Inventario 1'),
-    ('Inventario 2'),
-    ('Inventario 3'),
-    ('Inventario 4'),
-    ('Inventario 5'),
-    ('Inventario 6'),
-    ('Inventario 7'),
-    ('Inventario 8'),
-    ('Inventario 9'),
-    ('Inventario 10');
+INSERT INTO inventarios (nombre_inventarios) VALUES
+    ('inventarios 1'),
+    ('inventarios 2'),
+    ('inventarios 3'),
+    ('inventarios 4'),
+    ('inventarios 5'),
+    ('inventarios 6'),
+    ('inventarios 7'),
+    ('inventarios 8'),
+    ('inventarios 9'),
+    ('inventarios 10');
 
-INSERT INTO inventario_detalle (id_inventario, idejemplar, stock, stock_reserva) VALUES
+INSERT INTO detalle_inventario (id_inventarios, idejemplar, stock, stock_reserva) VALUES
     (1, 1, 5, 4),
     (1, 2, 3, 5),
     (1, 3, 2, 6),
@@ -254,7 +254,7 @@ INSERT INTO inventario_detalle (id_inventario, idejemplar, stock, stock_reserva)
     (10, 14, 69, 18),
     (10, 15, 29, 6);
 
-INSERT INTO bibliotecas (nombre_biblioteca, estado_biblioteca, fecha_creacion, id_inventario, idcampus, ubicacion_biblioteca, id_encargado, id_horario) VALUES
+INSERT INTO registro_bibliotecas (nombre_biblioteca, estado_biblioteca, fecha_creacion, id_inventarios, idcampus_universidades, ubicacion_biblioteca, id_encargado, id_horario) VALUES
     ('Biblioteca A', 'Activa', '2023-10-24', 1, 1, 'Ciudad Guatemala', 1, 1),
     ('Biblioteca B', 'Activa', '2023-10-24', 2, 2, 'Escuintla', 2, 2),
     ('Biblioteca C', 'Activa', '2023-10-24', 3, 3, 'Xela', 3, 3),
@@ -263,27 +263,27 @@ INSERT INTO bibliotecas (nombre_biblioteca, estado_biblioteca, fecha_creacion, i
     ('Biblioteca F', 'Activa', '2023-10-24', 6, 6, 'Ciudad Guatemala', 6, 6),
     ('Biblioteca G', 'Activa', '2023-10-24', 7, 7, 'Palin, Escuintla', 7, 7),
     ('Biblioteca H', 'Activa', '2023-10-24', 8, 8, 'Amatitlan', 8, 8),
-    ('Biblioteca I', 'Inactiva', '2023-10-24', 9, 9, 'Campus Central', 9, 9),
-    ('Biblioteca J', 'Activa', '2023-10-24', 10, 10, 'Campus Central', 10, 10);
+    ('Biblioteca I', 'Inactiva', '2023-10-24', 9, 9, 'campus_universidades Central', 9, 9),
+    ('Biblioteca J', 'Activa', '2023-10-24', 10, 10, 'campus_universidades Central', 10, 10);
 
 INSERT INTO tipo_movimiento (descripcion, estado_movimiento) VALUES
     ('Reserva', 'Activo'),
     ('Préstamo', 'Activo'),
     ('Devolución', 'Activo');
 
-INSERT INTO estado_movimientos (descripcion_estado) VALUES
+INSERT INTO estado_mov (descripcion_estado) VALUES
     ('Creado'),
     ('Solicitado'),
     ('Finalizado');
 
-INSERT INTO carrera_universitaria (nombre_carrera, estado_carrera) VALUES
+INSERT INTO carreras_disponibles (nombre_carrera, estado_carrera) VALUES
     ('Ingeniería en Sistemas', 'Activa'),
     ('Licenciatura en Letras', 'Activa'),
     ('Ingeniería en Agronomía', 'Activa'),
     ('Ingeniería Industrial', 'Activa'),
     ('Licenciatura en Leyes', 'Activa');
 
-INSERT INTO estudiantes (nombre_estudiante, carnet, ciclo, fecha_ingreso, estado_estudiante, id_carrera, idcampus) VALUES
+INSERT INTO registro_estudiantes (nombre_estudiante, carnet, ciclo, fecha_ingreso, estado_estudiante, id_carrera, idcampus_universidades) VALUES
     ('Estudiante 1', '12345', 'Ciclo 1', '2023-10-23', 'Activo', 1, 1),
     ('Estudiante 2', '23456', 'Ciclo 2', '2023-10-23', 'Activo', 2, 2),
     ('Estudiante 3', '34567', 'Ciclo 3', '2023-10-23', 'Activo', 3, 3),
@@ -300,7 +300,7 @@ INSERT INTO estudiantes (nombre_estudiante, carnet, ciclo, fecha_ingreso, estado
     ('Estudiante 14', '45678', 'Ciclo 4', '2023-10-23', 'Activo', 4, 4),
     ('Estudiante 15', '56789', 'Ciclo 5', '2023-10-23', 'Activo', 5, 5);
 
-INSERT INTO movimientos_prestamo (idbiblioteca, id_estudiante, fecha_movimiento, idestado_movimiento) VALUES
+INSERT INTO movimientos (idbiblioteca, id_estudiante, fecha_movimiento, idestado_movimiento) VALUES
     (1, 1, '2023-10-23', 2),
     (2, 2, '2023-10-22', 2),
     (3, 3, '2023-10-21', 2),
@@ -322,7 +322,7 @@ INSERT INTO movimientos_prestamo (idbiblioteca, id_estudiante, fecha_movimiento,
     (9, 4, '2023-10-05', 2),
     (10, 5, '2023-10-04', 2);
 
-INSERT INTO detalle_movimiento (fecha_ingreso, fecha_vencimiento, id_movimiento, idejemplar, idtipo_movimiento, idestado_movimiento, cantidad) VALUES
+INSERT INTO movimiento_detalle (fecha_ingreso, fecha_vencimiento, id_movimiento, idejemplar, idtipo_movimiento, idestado_movimiento, cantidad) VALUES
     ('2023-10-23', '2023-10-23', 1, 1, 2, 2, 3),
     ('2023-10-22', '2023-10-22', 2, 2, 2, 2, 3),
     ('2023-10-21', '2023-10-21', 3, 3, 2, 3, 2),
